@@ -1,0 +1,6 @@
+- name: Add new user
+  user:
+    name: tst-ansible-bi
+    comment: "Ansible account for BI"
+    group: wheel
+    password: "$1$xyz$TJ66UTt4/ZpoICxxOHc5V0"

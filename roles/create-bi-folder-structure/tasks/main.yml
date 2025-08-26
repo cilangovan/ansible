@@ -1,0 +1,77 @@
+
+
+- name: Create base folder structure  on target to down load java installer
+  file:
+    path: "{{solution_deploy_dir}}/pentaho"
+    owner: "{{homeuser}}"
+    group: "{{homeuser}}"
+    mode: 0755
+    state: directory
+  become: True
+
+
+
+- name: Create Subfolder level 1
+  file:
+    path: "{{solution_deploy_dir}}/pentaho/{{item}}"
+    owner: "{{homeuser}}"
+    group: "{{homeuser}}"
+    mode: 0755
+    recurse: yes
+    state: directory
+  with_items: ["data", "install", "packages" ]
+  become: True
+
+
+- name: Create subfolders for data directory
+  file:
+    path: "{{solution_deploy_dir}}/pentaho/data/{{item}}"
+    owner: "{{homeuser}}"
+    group: "{{homeuser}}"
+    mode: 0755
+    recurse: yes
+    state: directory
+  with_items: ["code-drop", "git_repo" ]
+  become: True
+
+
+
+- name: Create subfolders for install directory
+  file:
+    path: "{{solution_deploy_dir}}/pentaho/install/{{item}}"
+    owner: "{{homeuser}}"
+    group: "{{homeuser}}"
+    mode: 0755
+    recurse: yes
+    state: directory
+  with_items: ["pentaho", "flyway" ]
+  become: True
+
+
+
+- name: Create base folder structure for Staging
+  file:
+    path: "{{staging_location}}/pentaho"
+    owner: "{{homeuser}}"
+    group: "{{homeuser}}"
+    mode: 0755
+    state: directory
+  become: True
+
+- name: Create base folder structure for Staging
+  file:
+    path: "{{staging_location}}/pentaho/stagingdata"
+    owner: "{{homeuser}}"
+    group: "{{homeuser}}"
+    mode: 0755
+    state: directory
+  become: True
+
+- name: Create base folder structure for Staging
+  file:
+    path: "{{staging_location}}/pentaho/stagingdata/staging"
+    owner: "{{homeuser}}"
+    group: "{{homeuser}}"
+    mode: 0755
+    state: directory
+  become: True
