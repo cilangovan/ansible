@@ -1,0 +1,8 @@
+[bi]
+172.31.26.142  ansible_connection=ssh  ansible_user=dev-ansible-bi
+172.31.26.141  ansible_connection=ssh  ansible_user=dev-ansible-bi
+
+[pentaho-bi]
+172.31.26.142  ansible_connection=ssh  ansible_user=dev-ansible-bi
+[pentaho-di]
+172.31.26.141  ansible_connection=ssh  ansible_user=dev-ansible-bi

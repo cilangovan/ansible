@@ -1,0 +1,1 @@
+echo FLYWAYDB_HOME

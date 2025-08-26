@@ -1,0 +1,414 @@
+
+
+envionmental_file: "/etc/profile"
+
+jdk_installer_name: jdk-8u111-linux-x64.rpm
+jdk_dir: jdk-8u111-linux-x64
+java_download_folder: /opt/oracle/java
+bin_dir: /usr/java
+jdk_version: jdk1.8.0_111
+java_version: 8
+java_subversion: 111
+java_build_custom: 14
+
+mysql_jdbc_filename: mysql-connector-java.jar
+
+current_pentaho_license: set1
+ansible_user: dev-ansible-bi
+
+homeuser: hccadmin
+
+
+SQL_SERVER_LISTENER: 172.31.26.150
+SQL_SERVER_PORT: 1433
+
+sql_bi_hibernate: hibernate_bi
+sql_bi_hibernate_key: Ws@de@sdas
+sql_bi_quartz: quartz_bi
+sql_bi_quartz_key: Ws@de@sdas
+sql_bi_jackrabbit: jackrabbit_bi
+sql_bi_jackrabbit_key: Ws@de@sdas
+
+sql_di_hibernate: hibernate_di
+sql_di_hibernate_key: Ws@de@sdas
+sql_di_quartz: quartz_di
+sql_di_quartz_key: Ws@de@sdas
+sql_di_jackrabbit: jackrabbit_di
+sql_di_jackrabbit_key: Ws@de@sdas
+
+pentaho_di_binary: pentaho-server-clean-install-di-v2-7.1.0.9.101.tar.gz
+
+pentaho_bi_binary: pentaho-server-clean-install-bi-v2-7.1.0.13-142.tar.gz
+
+homeuser_hadoop: hccadmin
+superuser-hadoop: hdfs
+
+edge_node: 172.31.26.132
+
+di_server_xms: 2096m
+di_server_xmx: 9144m
+
+di_spoon_xms: 1024m
+di_spoon_xmx: 10196m
+
+
+bi_server_xms: 2048m
+bi_server_xmx: 10576m
+
+
+staging_location: "/opt"
+solution_deploy_dir: "/opt"
+current_parser: parser-1.0.3.1.jar
+previous_parser: parser-1.0.3.1.jar
+
+git_solution_folder: HitachiRailEurope
+
+
+git_branch: r_2.1.2
+
+date: "{{ lookup('pipe', 'date +%d-%m-%Y') }}"
+
+
+
+
+
+
+#homeuser: "skumar"
+
+
+
+PENTAHO_HOME: "/log/data/install/pentaho/pentaho-di"
+STAGINGAREA: "/log/data/staging"
+
+SQLDBPORT: "1433"
+SQLHOSTNAME: "172.31.24.164"
+SQLDBUSER: "Hccadmin"
+SQLDBNAME: "db_dev_wip"
+SQLDBPASSWORD: "Encrypted 2be98afc86aa7a881aa0def3487baebf1"
+
+
+HDFSHOST: "hdfs://nameservice1"
+HDFSPORT: ":8020"
+HDFSUSER: "/user/hccadmin"
+HADOOPHOST: "nameservice1"
+
+
+ARCHIVEBATCHSIZE: "3"
+
+DATABATCHSIZE: "2"
+
+DATAINGESTIONCOPIES: "26"
+
+
+IMPALAHOST: "hccdevne-dn0.northeurope.cloudapp.azure.com"
+IMPALAPASSWORD: ""
+IMPALADBNAME: "default"
+IMPALAUSER: ""
+IMPALAPORT: "21050"
+
+IMPALASCHEMA: "virdict_20170309"
+
+
+IMPALADWHSCHEMA: "data_warehouse_20170307_2"
+
+FILE_NAME_FACT_PCS: "fact_pcs"
+STAGING_PCS_SD1: "staging_pcs_sd1"
+STAGING_PCS_SD7: "staging_pcs_sd7"
+STAGING_PRE_PCS_SD1: "staging_pre_pcs_sd1"
+
+
+FILE_NAME_FACT_EVENT: "fact_event"
+
+FILE_NAME_OLD_FACT_EVENT: "fact_event_old"
+
+
+#This is used for energyX
+STAGING_FACT_ENERGYX: "staging_energyx"
+FACT_ENERGYX: "fact_energyx"
+
+
+
+#The default location of the hive warehouse folder. Doesnt usually change.
+IMPALASCHEMAPATH: "/user/hive/warehouse/"
+
+
+#Path (used in HDFS?) and the schema/table name used for the timeseries data
+TIMESERIESPATH: "/timeseries"
+TIMESERIESIMPALASCHEMA: "timeseries_20170309"
+TIMESERIESTABLENAME: "timeseries"
+
+
+#Activemq
+QUEUEHOST: "failover:(tcp://hccdevne-mn0.northeurope.cloudapp.azure.com:61616)"
+
+#Activemq queue name for the ANALYTICS processes
+ANALYTICSQUEUE: "analytics"
+
+
+#Configuration used by the digital signal fact loader
+
+#The number of binary files we process.  This is just a LIMIT on a SQL query that has no particular order.
+#We'll have to find a good value - should be more than 1, but sufficient so the job doesnt bog down and take ages.
+DIGSIGFACTFILESTOLOAD: "1"
+CNTSIGFACTFILESTOLOAD: "1"
+
+#The degree of parallelism we use when running the parser map reduce process for digital signal.
+#Note: This can cause high impala load when parsing completes
+DIGSIGFACTCOPIES: "4"
+CNTSIGFACTCOPIES: "4"
+
+#Degree of parallelism we use when getting data from different types of SD impala tables and provide it to timeseries tables
+TIMESERIESCOPIES: "3"
+#Max batch execution of data files at once
+TIMESERIESMAXBATCH: "2"
+
+#Number of days to purge
+PURGENUMBEROFDAYS: "10"
+
+#Number of days to keep of log data
+PURGEREPODAYS: "90"
+
+
+#SCHEDULER - Host, port, user and user password of the BA server where the schedules will be created.
+SCHEDULER_HOST: "hccdevne-mn0.northeurope.cloudapp.azure.com"
+SCHEDULER_PORT: "8080"
+SCHEDULER_USER: "admin"
+SCHEDULER_USER_PASS: "Encrypted 2be98afc86aa7f2e4bb18bd63c99dbdde"
+
+#Physical path where di folder from source is located.
+REPOROOT: "/log/data/virdict-develop-git/virdict"
+
+#Logs
+KETTLE_TRANS_LOG_DB: "PLATFORM_DB"
+KETTLE_TRANS_LOG_SCHEMA: "platform_logs"
+KETTLE_TRANS_LOG_TABLE: "log_etl_transformation"
+
+KETTLE_JOB_LOG_DB: "PLATFORM_DB"
+KETTLE_JOB_LOG_SCHEMA: "platform_logs"
+KETTLE_JOB_LOG_TABLE: "log_etl_job"
+
+KETTLE_CHANNEL_LOG_DB: "PLATFORM_DB"
+KETTLE_CHANNEL_LOG_SCHEMA: "platform_logs"
+KETTLE_CHANNEL_LOG_TABLE: "log_etl_job_channel"
+
+#Essential additional detail in the logs - gives a 'Stack'
+KETTLE_LOG_MARK_MAPPINGS: "Y"
+
+
+#TGZ file backup to HCP
+HCPROOT: "/log/data/tgzbackup"
+HCPSERVER: "172.31.24.132"
+HCPPORT: "22"
+HCPUSER: "hccadmin"
+HCPPASSWORD: "Encrypted 2be98afc86aa7f2e4cb79ce10be82b6ea"
+
+#Operational DB Connection
+OPERATIONALDBNAME: "OperationalDB"
+OPERATIONALDBPORT: "1433"
+OPERATIONALDBUSER: "Hccadmin"
+OPERATIONALDBPASSWORD: "Encrypted 2be98afc86aa7a881aa0def3487baebf1"
+OPERATIONALDBHOSTNAME: "172.31.24.164"
+
+#Cassandra DB Connection
+CASSANDRAURL: "jdbc:c*://172.31.24.138:9042/virdict_cassandra"
+CASSANDRAUSER: "cassandra"
+CASSANDRAPASSWORD: "cassandra"
+
+
+
+#DATA SCIENCE ENABLEMENT
+#Staging folder for Dada science module
+DSEXTRACTAREA: "/log/data/dsstaging"
+#Data Science number of jobs in parallel
+DATASCIENCECOPIES: "5"
+
+
+
+# START - Addeded by Suresh Kumar V. - WSO2 Changes
+
+#Mapping ID : WSO-01 :  LDAP Entries inside {{ base_directory }}pentaho-server/kettle/.kettle/kettle.properties
+LDAP_HOST: 172.31.26.5
+LDAP_PORT: 389
+LDAP_USERNAME: "Admin"
+LDAP_PASSWORD: r$GPvrNvtn5E3P
+LDAP_SEARCH_BASE: OU=Users,OU=HCC HRE App Team,DC=virdictdev,DC=local
+
+#Mapping ID : WSO-04 : Data Source Value Entries in pentaho-solutions/system/applicationContext-EXT-DynamicdataSources.
+DATASOURCES_TOMODIFY_01: mydataDS
+DATASOURCES_TOMODIFY_02: IMPALA
+
+#Mapping ID : WSO-09 : Copy applicationContext-security-ldap.properties after adding the ldap property values
+USERSEARCH_SEARCHBASE: "OU=Users,OU=HCC HRE App Team,DC=virdictdev,DC=local"
+ALLAUTHORITIESSEARCH_ROLEATTRIBUTE: cn
+ALLAUTHORITIESSEARCH_SEARCHBASE: OU\=groups,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+USERSEARCH_SEARCHFILTER: (sAMAccountName\={0})
+ALLUSERNAMESSEARCH_SEARCHFILTER: (&(objectClass\=Person)(|(company\={{ ALLAUTHORITIESSEARCH_SEARCHFILTER_01 }}{{ ALLAUTHORITIESSEARCH_SEARCHFILTER_01 }}{{ ALLAUTHORITIESSEARCH_SEARCHFILTER_02 }}{{ ALLAUTHORITIESSEARCH_SEARCHFILTER_03 }}{{ ALLAUTHORITIESSEARCH_SEARCHFILTER_03 }})(company\=HCC HRE App Team)))
+ALLAUTHORITIESSEARCH_SEARCHFILTER: (&(objectClass\=group)(|(info\={{ ALLAUTHORITIESSEARCH_SEARCHFILTER_01 }}{{ ALLAUTHORITIESSEARCH_SEARCHFILTER_01 }}{{ ALLAUTHORITIESSEARCH_SEARCHFILTER_02 }}{{ ALLAUTHORITIESSEARCH_SEARCHFILTER_03 }}{{ ALLAUTHORITIESSEARCH_SEARCHFILTER_03 }})(info\=HCC HRE App Team)))
+PROVIDERTYPE: ldapCustomConfiguration
+CONTEXTSOURCE_USERDN: admin
+POPULATOR_ROLEPREFIX:
+ALLUSERNAMESSEARCH_SEARCHBASE: OU\=Users,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+ADMINUSER: CN\=admin,OU\=Users,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+ADMINROLE: CN\=Administrator,OU\=groups,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+POPULATOR_GROUPSEARCHBASE: OU\=groups,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+POPULATOR_CONVERTTOUPPERCASE: false
+POPULATOR_SEARCHSUBTREE: true
+ALLUSERNAMESSEARCH_USERNAMEATTRIBUTE: sAMAccountName
+POPULATOR_GROUPROLEATTRIBUTE: cn
+CONTEXTSOURCE_PROVIDERURL: ldap\://172.31.26.5\:389
+POPULATOR_GROUPSEARCHFILTER: (member\={0})
+CONTEXTSOURCE_PASSWORD: r$GPvrNvtn5E3P
+
+ALLAUTHORITIESSEARCH_SEARCHFILTER_01: "{"
+ALLAUTHORITIESSEARCH_SEARCHFILTER_02: tenantid
+ALLAUTHORITIESSEARCH_SEARCHFILTER_03: "}"
+
+#Mapping ID: WSO-10 : Copy security.properties after adding the property values
+PROVIDER: saml
+REQUESTPARAMETERAUTHENTICATIONENABLED: false
+SKIPUSERVERIFICATIONONPRINCIPALCREATION: true
+
+#Mapping ID: WSO-11 : Copy server.properties after adding the fully qualified URL property value
+FULLY_QUALIFIED_SERVER_URL: http://ba-dev.hfmt.co.uk:8080/pentaho/
+
+#Mapping ID: WSO-12 : Copying pentaho-saml-sample-7.0-SNAPSHOT.kar file
+SAML_KAR_FILE_NAME: pentaho-saml-sample-7.1.kar
+
+#Mapping ID: WSO-13 : Copy pentaho.saml.cfg after adding values
+SAML_ID: saml
+SAML_DISCOVERY_IDP_ENABLED: false
+SAML_IDP_SELECTION_JSP: N/A
+SAML_SP_METADATA_ENTITYID: pentaho
+SAML_SP_METADATA_FILESYSTEM: "/opt/pentaho/install/pentaho/pentaho-bi/pentaho-server/saml/pentaho-sp.xml"
+SAML_IDP_URL: VirdictSSO
+SAML_IDP_METADATA_FILESYSTEM: "/opt/pentaho/install/pentaho/pentaho-bi/pentaho-server/saml/WSO2-IdP-metadata.xml"
+SAML_VALID_RESPONSE_INTERVAL_IN_SECS: 86400
+SAML_ROLE_RELATED_USER_ATTRIBUTE_NAME: "Pentaho Role"
+SAML_ROLE_RELATED_USER_ATTRIBUTE_PREFIX: "Pentaho:"
+SAML_KEYSTORE_FILESYSTEM: "/opt/pentaho/install/pentaho/pentaho-bi/pentaho-server/saml/wso2carbon.jks"
+SAML_KEYSTORE_PASSWORD: wso2carbon
+SAML_KEYSTORE_PRIVATE_USERNAME_PASSWORDS: "wso2carbon:wso2carbon"
+SAML_USERNAME_PASSWORD_DELIMITER_CHAR: ":"
+SAML_KEYSTORE_DEFAULT_KEY: wso2carbon
+LOGOUT_REDIRECT_URL: "/platform/logout"
+ENSURE_INCOMING_LOGOUT_REQUEST_SIGNED: false
+ENSURE_OUTGOING_LOGOUT_RESPONSE_SIGNED: true
+ENSURE_OUTGOING_LOGOUT_REQUEST_SIGNED: true
+USE_GLOBAL_LOGOUT_STRATEGY: true
+AUTHORIZATION_PROVIDER: ldap
+SAML_LB_SCHEME: https
+SAML_LB_SERVERNAME: 172.31.26.202
+SAML_LB_CONTEXTPATH: "/pentaho"
+SAML_LB_SERVERPORT: 8448
+SAML_LB_INCLUDESERVERPORTINREQUESTURL: true
+
+#Mapping ID: WSO-14 : Copy org.apache.karaf.features.cfg after adding the values
+RESPECTSTARTLVLDURINGFEATURESTARTUP: false
+FEATURESREPOSITORIES: "mvn:org.apache.karaf.features/standard/3.0.3/xml/features,mvn:org.apache.karaf.features/enterprise/3.0.3/xml/features,mvn:org.apache.cxf.karaf/apache-cxf/3.0.7/xml/features,mvn:org.apache.camel.karaf/apache-camel/2.14.3/xml/features,mvn:org.apache.karaf.features/spring/3.0.3/xml/features,mvn:pentaho/pentaho-karaf-features/7.1.0.0-12/xml/standard,mvn:pentaho/pentaho-karaf-features/7.1.0.0-12/xml/enterprise,mvn:pentaho/pentaho-karaf-features/7.1.0.0-12/xml/server,mvn:org.apache.activemq/activemq-karaf/5.10.0/xml/features,mvn:pentaho-karaf-features/pentaho-big-data-plugin-osgi/7.1.0.0-12/xml/features,mvn:pentaho-karaf-features/pentaho-yarn-feature/7.1.0.0-12/xml/features,mvn:org.pentaho/pentaho-marketplace/7.1.0.0-12/xml/features,mvn:org.pentaho.adaptive/adaptive-execution-features/7.1.0.0-12/xml/features,mvn:org.apache.aries.rsa/rsa-features/1.10.0/xml/features,mvn:org.pentaho/pdi-engine-configuration/7.1.0.0-12/xml/features"
+FEATURESBOOT: "config,management,kar,cxf,camel,camel-blueprint,camel-stream,pentaho-camel-jms,pentaho-server,mongolap,pentaho-monitoring-to-snmp,pentaho-metaverse,pdi-dataservice,pdi-data-refinery,pentaho-big-data-ee-plugin-osgi-obf,pdi-engine-configuration"
+FEATURESBOOTASYNCHRONOUS: true
+
+#Mapping ID: WSO-17 : Add & Copy /opt/pentaho/install/pentaho/pentaho-bi/pentaho-server/pentaho-solutions/system/repository.spring.properties
+SUPERADMINAUTHORITYNAME: SysAdmin
+VERSIONCOMMENTSENABLED: false
+SINGLETENANTADMINAUTHORITYNAME:	Administrator
+CACHE_SIZE: 100
+VERSIONINGENABLED: false
+SUPERADMINUSERNAME: super
+SINGLETENANTADMINUSERNAME: admin
+SINGLETENANTADMINDEFAULTAUTHORITYNAME: Administrator
+SINGLETENANTADMINDEFAULTUSERNAME: admin
+CACHE_TTL: 300
+SINGLETENANTANONYMOUSAUTHORITYNAME: Anonymous
+SINGLETENANTAUTHENTICATEDAUTHORITYNAME: Authenticated
+USEMULTIBYTEENCODING: FALSE
+SYSTEMTENANTADMINUSERNAME: system
+REPOSITORYADMINUSERNAME: pentahoRepoAdmin
+SYSTEMTENANTADMINPASSWORD: cGFzc3dvcmQ\=
+
+#Mapping ID: WSO-19 : Generation of Certificate wso2carbon.jks
+CERT_DN_NAME: "CN=admin, OU=services, O=pentaho, L=orlando, ST=fl, C=us"
+STORE_PASSWORD: "wso2carbon"
+KEY_PASSWORD: "wso2carbon"
+EXPORTCERT_ALIAS: "pentaho"
+
+#pentaho-sp.xml file
+SP_ENTITY_ID: "pentaho133"
+SINGLELOGOUTSERVICE_HTTP_REDIRECT: "https://ba-dev.hfmt.co.uk:8448/pentaho/saml/SingleLogout"
+SINGLELOGOUTSERVICE_HTTP_POST: "https://ba-dev.hfmt.co.uk:8448/pentaho/saml/SingleLogout"
+ASSERTIONCONSUMERSERVICE_LOCATION_HTTP_POST: "https://ba-dev.hfmt.co.uk:8448/pentaho/saml/SSO"
+ASSERTIONCONSUMERSERVICE_LOCATION_HTTP_ARTIFACT: "https://ba-dev.hfmt.co.uk:8448/pentaho/saml/SSO"
+
+#Mapping ID WSO-21a : Add & Copy /opt/pentaho/install/pentaho/pentaho-bi/pentaho-server/saml/WSO2-IdP-metadata.xml
+wSO2_ENTITY_ID: VirdictSSO
+WSO2_SINGLELOGOUTSERVICE_LOCATION: "https://identity-dev.hfmt.co.uk:9443/samlsso"
+WSO2_SINGLELOGOUTSERVICE_RESPONSE_LOCATION: "https://identity-dev.hfmt.co.uk:9443/samlsso"
+WSO2_SINGLESIGNONSERVICE_LOCATION_HTTP_POST: "https://identity-dev.hfmt.co.uk:9443/samlsso"
+WSO2_SINGLESIGNONSERVICE_LOCATION_HTTP_REDIRECT: "https://identity-dev.hfmt.co.uk:9443/samlsso"
+
+#Mapping ID WSO-22 : Add & Copy /opt/pentaho/install/pentaho/pentaho-bi/pentaho-server/tomcat/conf/server.xml
+SHUTDOWN_PORT: 8005
+CONNECTOR_HTTP_PORT: 8080
+CONNECTOR_HTTP_SCHEME: scheme='https'
+#"scheme='https'"
+CONNECTOR_PROTOCOL: protocol='HTTP/1.1'
+CONNECTOR_HTTPS_PARAMETERS: proxyPort='8448'
+#"maxThreads='150' SSLEnabled='true' secure='true' clientAuth='false' sslProtocol='TLS'"
+
+#Mapping ID WSO-25 : Add & Copy /opt/pentaho/install/pentaho/pentaho-bi/pentaho-server/tomcat/webapps/pentaho/WEB-INF/classes/classic-engine.properties
+ORG_PENTAHO_REPORTING_ENGINE_CLASSIC_EXTENSIONS_DATASOURCES_PMD_SQLGENERATORCLASS: com.pentaho.oem.sk.datafilter.DynamicSqlGenerator
+
+
+
+#AD Configuration for DI Nodes
+
+#Mapping ID : WSO-09 : Copy applicationContext-security-ldap.properties after adding the ldap property values
+DI_USERSEARCH_SEARCHBASE: OU=Users,OU=HCC HRE App Team,DC=virdictdev,DC=local
+DI_ALLAUTHORITIESSEARCH_ROLEATTRIBUTE: cn
+DI_ALLAUTHORITIESSEARCH_SEARCHBASE: OU\=groups,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+DI_USERSEARCH_SEARCHFILTER: (sAMAccountName\={0})
+DI_ALLUSERNAMESSEARCH_SEARCHFILTER: (objectClass\=Person)
+DI_ALLAUTHORITIESSEARCH_SEARCHFILTER: (objectClass\=group)
+DI_PROVIDERTYPE: ldapCustomConfiguration
+DI_CONTEXTSOURCE_USERDN: admin
+DI_POPULATOR_ROLEPREFIX:
+DI_ALLUSERNAMESSEARCH_SEARCHBASE: OU\=Users,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+DI_ADMINUSER: CN\=admin,OU\=Users,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+DI_ADMINROLE: CN\=Administrator,OU\=groups,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+DI_POPULATOR_GROUPSEARCHBASE: OU\=groups,OU\=HCC HRE App Team,DC\=virdictdev,DC\=local
+DI_POPULATOR_CONVERTTOUPPERCASE: false
+DI_POPULATOR_SEARCHSUBTREE: true
+DI_ALLUSERNAMESSEARCH_USERNAMEATTRIBUTE: sAMAccountName
+DI_POPULATOR_GROUPROLEATTRIBUTE: cn
+DI_CONTEXTSOURCE_PROVIDERURL: ldap\://172.31.26.5\:389
+DI_POPULATOR_GROUPSEARCHFILTER: (member\={0})
+DI_CONTEXTSOURCE_PASSWORD: r$GPvrNvtn5E3P
+
+
+#Mapping ID: WSO-10 : Copy security.properties after adding the property values Mapping ID: WSO-10 : Copy security.properties after adding the property values
+DI_PROVIDER: ldap
+DI_REQUESTPARAMETERAUTHENTICATIONENABLED: false
+DI_SKIPUSERVERIFICATIONONPRINCIPALCREATION: true
+
+#Mapping ID: WSO-11 : Copy server.properties after adding the fully qualified URL property value
+DI_FULLY_QUALIFIED_SERVER_URL: http://localhost:8080/pentaho/
+
+#Mapping ID: WSO-17 : Add & Copy /opt/pentaho/install/pentaho/pentaho-bi/pentaho-server/pentaho-solutions/system/repository.spring.properties
+DI_SUPERADMINAUTHORITYNAME: SysAdmin
+DI_VERSIONCOMMENTSENABLED: false
+DI_SINGLETENANTADMINAUTHORITYNAME: Administrator
+DI_CACHE_SIZE: 100
+DI_VERSIONINGENABLED: false
+DI_SUPERADMINUSERNAME: super
+DI_SINGLETENANTADMINUSERNAME: admin
+DI_SINGLETENANTADMINDEFAULTAUTHORITYNAME: Administrator
+DI_SINGLETENANTADMINDEFAULTUSERNAME: admin
+DI_CACHE_TTL: 300
+DI_SINGLETENANTANONYMOUSAUTHORITYNAME: Anonymous
+DI_SINGLETENANTAUTHENTICATEDAUTHORITYNAME: Authenticated
+DI_USEMULTIBYTEENCODING: FALSE
+DI_SYSTEMTENANTADMINUSERNAME: system
+DI_REPOSITORYADMINUSERNAME: pentahoRepoAdmin
+DI_SYSTEMTENANTADMINPASSWORD: cGFzc3dvcmQ=
+
+# END - Addeded by Suresh Kumar V. - WSO2 Changes
