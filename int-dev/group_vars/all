@@ -16,7 +16,7 @@ mysql_jdbc_filename: mysql-connector-java.jar
 current_pentaho_license: set1
 ansible_user: dev-ansible-bi
 
-homeuser: hccadmin
+homeuser: lubuntu
 
 
 SQL_SERVER_LISTENER: 172.31.26.150
