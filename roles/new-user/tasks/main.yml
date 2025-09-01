@@ -1,3 +1,8 @@
+- name: Ensure wheel group exists
+  group:
+    name: wheel
+    state: present
+
 - name: Add new user
   user:
     name: tst-ansible-bi
