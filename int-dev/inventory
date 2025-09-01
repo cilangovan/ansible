@@ -1,2 +1,2 @@
 [lubuntu]
-192.168.1.27  ansible_connection=ssh  ansible_user=lubuntu
+192.168.1.27 ansible_user=lubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
