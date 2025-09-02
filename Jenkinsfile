@@ -9,6 +9,7 @@ pipeline {
 
     parameters {
         string(name: 'INVENTORY_PATH', defaultValue: 'int-dev', description: 'Path to inventory folder')
+        string(name: 'PLAYBOOK_FILE', defaultValue: 'new-user.yml', description: 'Ansible playbook file to run')
         string(name: 'BECOME_PASS', defaultValue: 'lubuntu', description: 'Ansible become password')
         string(name: 'BUILD_VERSION', defaultValue: '1.0.0', description: 'Build version number')
         booleanParam(name: 'VERBOSE', defaultValue: true, description: 'Enable verbose output')
@@ -50,6 +51,12 @@ pipeline {
                         error "Inventory path ${params.INVENTORY_PATH} does not exist!"
                     }
 
+                    // Check if playbook exists
+                    def playbookExists = fileExists("${params.PLAYBOOK_FILE}")
+                    if (!playbookExists) {
+                        error "Playbook file ${params.PLAYBOOK_FILE} does not exist!"
+                    }
+
                     // Method 1: Use expect if available (non-interactive)
                     def expectAvailable = sh(script: 'command -v expect', returnStatus: true) == 0
 
@@ -64,7 +71,7 @@ pipeline {
                                 ${params.VERBOSE ? '-vvv' : ''} \\
                                 --become \\
                                 --ask-become-pass \\
-                                new-user.yml
+                                ${params.PLAYBOOK_FILE}
                             expect "BECOME password:"
                             send "${params.BECOME_PASS}\\\\r"
                             expect eof
@@ -81,7 +88,7 @@ pipeline {
                                 --extra-vars="ansible_become_pass=${params.BECOME_PASS} build_version=${params.BUILD_VERSION} build_id=${BUILD_NUMBER} package_name=${PACKAGE_NAME}" \\
                                 ${params.VERBOSE ? '-vvv' : ''} \\
                                 --become \\
-                                new-user.yml
+                                ${params.PLAYBOOK_FILE}
                         """
                     }
                 }
