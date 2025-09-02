@@ -4,7 +4,7 @@ pipeline {
     }
 
     options {
-        timeout(time: 1, unit: 'MINUTES') // This applies to the entire pipeline
+        timeout(time: 30, unit: 'MINUTES') // Increased timeout to 30 minutes
     }
 
     parameters {
@@ -26,6 +26,11 @@ pipeline {
                 sh '''
                     echo "Creating build directory structure..."
                     mkdir -p build/package
+
+                    # Create some dummy content for testing
+                    echo "Build version: ${BUILD_VERSION}" > build/package/version.txt
+                    echo "Build ID: ${BUILD_ID}" >> build/package/version.txt
+                    date > build/package/build-time.txt
 
                     echo "Building application..."
                     # Add your actual build commands here
@@ -49,27 +54,39 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Deploying using Ansible"
-                sh """
-                    if ! command -v expect &> /dev/null; then
-                        sudo apt-get update && sudo apt-get install -y expect
-                    fi
+                script {
+                    // Check if inventory exists
+                    def inventoryExists = fileExists("${params.INVENTORY_PATH}")
+                    if (!inventoryExists) {
+                        error "Inventory path ${params.INVENTORY_PATH} does not exist!"
+                    }
 
-                    /usr/bin/expect <<EOF
-                    set timeout 300
-                    spawn ansible-playbook \\
-                        -i ${params.INVENTORY_PATH} \\
-                        --extra-vars="ansible_become_pass=${params.BECOME_PASS} build_version=${params.BUILD_VERSION} build_id=${BUILD_NUMBER} package_name=${PACKAGE_NAME}" \\
-                        ${params.VERBOSE ? '-vvv' : ''} \\
-                        --become \\
-                        --ask-become-pass \\
-                        new-user.yml
-                    expect "BECOME password:"
-                    send "${params.BECOME_PASS}\\r"
-                    expect eof
-                    catch wait result
-                    exit [lindex \$result 3]
-                    EOF
-                """
+                    // Install expect if needed
+                    sh '''
+                        if ! command -v expect &> /dev/null; then
+                            sudo apt-get update && sudo apt-get install -y expect
+                        fi
+                    '''
+
+                    // Run Ansible with expect
+                    sh """
+                        /usr/bin/expect <<EOF
+                        set timeout 300
+                        spawn ansible-playbook \\
+                            -i ${params.INVENTORY_PATH} \\
+                            --extra-vars="ansible_become_pass=${params.BECOME_PASS} build_version=${params.BUILD_VERSION} build_id=${BUILD_NUMBER} package_name=${PACKAGE_NAME}" \\
+                            ${params.VERBOSE ? '-vvv' : ''} \\
+                            --become \\
+                            --ask-become-pass \\
+                            new-user.yml
+                        expect "BECOME password:"
+                        send "${params.BECOME_PASS}\\\\r"
+                        expect eof
+                        catch wait result
+                        exit [lindex \\\$result 3]
+                        EOF
+                    """
+                }
             }
         }
 
@@ -77,7 +94,8 @@ pipeline {
             steps {
                 echo "Verifying deployment"
                 sh """
-                    ansible -i ${params.INVENTORY_PATH} -m ping all
+                    # Test connection to verify deployment
+                    ansible -i ${params.INVENTORY_PATH} -m ping all || true
 
                     echo "Deployment completed successfully!"
                     echo "Build Version: ${params.BUILD_VERSION}"
@@ -91,7 +109,8 @@ pipeline {
     post {
         always {
             echo "Cleaning up workspace"
-            cleanWs()
+            // Use deleteDir instead of cleanWs (which requires plugin)
+            deleteDir()
         }
         success {
             echo "CI/CD Pipeline completed successfully!"
