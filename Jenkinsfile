@@ -101,17 +101,13 @@ pipeline {
 
     post {
         always {
-            echo "Pipeline execution completed"
-            echo "Cleaning up workspace"
             deleteDir()
         }
         success {
-            echo "✅ CI/CD Pipeline completed successfully!"
-            echo "📦 Artifact: ${PACKAGE_NAME}"
-            echo "🎯 Playbook: ${params.PLAYBOOK_FILE}"
+            echo "CI/CD Pipeline completed successfully!"
         }
         failure {
-            echo "❌ CI/CD Pipeline failed!"
+            echo "CI/CD Pipeline failed!"
         }
     }
-}7
+}
