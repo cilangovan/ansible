@@ -4,7 +4,7 @@ pipeline {
     }
 
     options {
-        timeout(time: 30, unit: 'MINUTES') // Increased timeout to 30 minutes
+        timeout(time: 30, unit: 'MINUTES')
     }
 
     parameters {
@@ -51,6 +51,30 @@ pipeline {
             }
         }
 
+        stage('Check Dependencies') {
+            steps {
+                echo "Checking required dependencies"
+                sh '''
+                    # Check if expect is available
+                    if command -v expect &> /dev/null; then
+                        echo "expect is already installed"
+                    else
+                        echo "expect is not available - will use alternative method"
+                    fi
+
+                    # Check if we can install packages
+                    if command -v apt-get &> /dev/null && [ -w /usr ]; then
+                        echo "Package installation possible"
+                    else
+                        echo "Package installation not possible in this environment"
+                    fi
+
+                    # Check ansible
+                    ansible --version
+                '''
+            }
+        }
+
         stage('Deploy') {
             steps {
                 echo "Deploying using Ansible"
@@ -61,31 +85,44 @@ pipeline {
                         error "Inventory path ${params.INVENTORY_PATH} does not exist!"
                     }
 
-                    // Install expect if needed
-                    sh '''
-                        if ! command -v expect &> /dev/null; then
-                            sudo apt-get update && sudo apt-get install -y expect
-                        fi
-                    '''
+                    // Try to use expect if available, otherwise use alternative
+                    def expectAvailable = sh(script: 'command -v expect', returnStatus: true) == 0
 
-                    // Run Ansible with expect
-                    sh """
-                        /usr/bin/expect <<EOF
-                        set timeout 300
-                        spawn ansible-playbook \\
-                            -i ${params.INVENTORY_PATH} \\
-                            --extra-vars="ansible_become_pass=${params.BECOME_PASS} build_version=${params.BUILD_VERSION} build_id=${BUILD_NUMBER} package_name=${PACKAGE_NAME}" \\
-                            ${params.VERBOSE ? '-vvv' : ''} \\
-                            --become \\
-                            --ask-become-pass \\
-                            new-user.yml
-                        expect "BECOME password:"
-                        send "${params.BECOME_PASS}\\\\r"
-                        expect eof
-                        catch wait result
-                        exit [lindex \\\$result 3]
-                        EOF
-                    """
+                    if (expectAvailable) {
+                        echo "Using expect for automated deployment"
+                        sh """
+                            /usr/bin/expect <<EOF
+                            set timeout 300
+                            spawn ansible-playbook \\
+                                -i ${params.INVENTORY_PATH} \\
+                                --extra-vars="ansible_become_pass=${params.BECOME_PASS} build_version=${params.BUILD_VERSION} build_id=${BUILD_NUMBER} package_name=${PACKAGE_NAME}" \\
+                                ${params.VERBOSE ? '-vvv' : ''} \\
+                                --become \\
+                                --ask-become-pass \\
+                                new-user.yml
+                            expect "BECOME password:"
+                            send "${params.BECOME_PASS}\\\\r"
+                            expect eof
+                            catch wait result
+                            exit [lindex \\\$result 3]
+                            EOF
+                        """
+                    } else {
+                        echo "Expect not available - using manual password input"
+                        echo "NOTE: This will pause the build waiting for password input"
+                        echo "Please enter the become password when prompted: ${params.BECOME_PASS}"
+
+                        // Manual method - will pause build waiting for input
+                        sh """
+                            ansible-playbook \\
+                                -i ${params.INVENTORY_PATH} \\
+                                --extra-vars="ansible_become_pass=${params.BECOME_PASS} build_version=${params.BUILD_VERSION} build_id=${BUILD_NUMBER} package_name=${PACKAGE_NAME}" \\
+                                ${params.VERBOSE ? '-vvv' : ''} \\
+                                --become \\
+                                --ask-become-pass \\
+                                new-user.yml
+                        """
+                    }
                 }
             }
         }
@@ -109,7 +146,6 @@ pipeline {
     post {
         always {
             echo "Cleaning up workspace"
-            // Use deleteDir instead of cleanWs (which requires plugin)
             deleteDir()
         }
         success {
