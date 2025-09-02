@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'ubuntu-agent' } // Replace with your actual slave label
+    agent { label 'ubuntu-agent-docker' } // Replace with your actual slave label
 
     parameters {
         string(name: 'INT_DEV_FOLDER', defaultValue: 'int-dev', description: 'Inventory folder for Ansible')
