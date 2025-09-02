@@ -24,21 +24,11 @@ pipeline {
             steps {
                 echo "Building version ${params.BUILD_VERSION}"
                 sh '''
-                    echo "Creating build directory structure..."
                     mkdir -p build/package
-
-                    # Create some dummy content for testing
                     echo "Build version: ${BUILD_VERSION}" > build/package/version.txt
                     echo "Build ID: ${BUILD_ID}" >> build/package/version.txt
                     date > build/package/build-time.txt
-
-                    echo "Building application..."
-                    # Add your actual build commands here
-
-                    echo "Creating package ${PACKAGE_NAME}"
                     tar -czf ${PACKAGE_NAME} build/package/*
-
-                    echo "Package created: ${PACKAGE_NAME}"
                     ls -la *.tar.gz
                 '''
             }
@@ -46,32 +36,7 @@ pipeline {
 
         stage('Archive Artifact') {
             steps {
-                echo "Archiving build artifact"
                 archiveArtifacts artifacts: '*.tar.gz', fingerprint: true
-            }
-        }
-
-        stage('Check Dependencies') {
-            steps {
-                echo "Checking required dependencies"
-                sh '''
-                    # Check if expect is available
-                    if command -v expect &> /dev/null; then
-                        echo "expect is already installed"
-                    else
-                        echo "expect is not available - will use alternative method"
-                    fi
-
-                    # Check if we can install packages
-                    if command -v apt-get &> /dev/null && [ -w /usr ]; then
-                        echo "Package installation possible"
-                    else
-                        echo "Package installation not possible in this environment"
-                    fi
-
-                    # Check ansible
-                    ansible --version
-                '''
             }
         }
 
@@ -85,11 +50,11 @@ pipeline {
                         error "Inventory path ${params.INVENTORY_PATH} does not exist!"
                     }
 
-                    // Try to use expect if available, otherwise use alternative
+                    // Method 1: Use expect if available (non-interactive)
                     def expectAvailable = sh(script: 'command -v expect', returnStatus: true) == 0
 
                     if (expectAvailable) {
-                        echo "Using expect for automated deployment"
+                        echo "Using expect for automated password input"
                         sh """
                             /usr/bin/expect <<EOF
                             set timeout 300
@@ -108,18 +73,14 @@ pipeline {
                             EOF
                         """
                     } else {
-                        echo "Expect not available - using manual password input"
-                        echo "NOTE: This will pause the build waiting for password input"
-                        echo "Please enter the become password when prompted: ${params.BECOME_PASS}"
-
-                        // Manual method - will pause build waiting for input
+                        // Method 2: Use SSH keys or alternative authentication
+                        echo "Using non-interactive method with become password in extra vars"
                         sh """
                             ansible-playbook \\
                                 -i ${params.INVENTORY_PATH} \\
                                 --extra-vars="ansible_become_pass=${params.BECOME_PASS} build_version=${params.BUILD_VERSION} build_id=${BUILD_NUMBER} package_name=${PACKAGE_NAME}" \\
                                 ${params.VERBOSE ? '-vvv' : ''} \\
                                 --become \\
-                                --ask-become-pass \\
                                 new-user.yml
                         """
                     }
@@ -131,13 +92,8 @@ pipeline {
             steps {
                 echo "Verifying deployment"
                 sh """
-                    # Test connection to verify deployment
                     ansible -i ${params.INVENTORY_PATH} -m ping all || true
-
-                    echo "Deployment completed successfully!"
-                    echo "Build Version: ${params.BUILD_VERSION}"
-                    echo "Build ID: ${BUILD_NUMBER}"
-                    echo "Package: ${PACKAGE_NAME}"
+                    echo "Deployment completed!"
                 """
             }
         }
@@ -145,7 +101,6 @@ pipeline {
 
     post {
         always {
-            echo "Cleaning up workspace"
             deleteDir()
         }
         success {
